@@ -27,13 +27,12 @@ setOpenedFolder([...openedFolder,id])
 const RenderFolder = ({item}) => {
 
 const children = listDir.filter(dir => dir.parent === item.id);
-
+//{state!==false && state===item.id && <Modal item={state} />}
+//{stateDel!==false && stateDel===item.id && <ModalDel item={item} />}
 return <li>
 <span onClick={() => children.length && openFolder(item.id)}>{item.name}</span>
 <button onClick={() =>setState(item.id)} class="zatemnenie">добавить элемент в {item.name}</button>
 <button onClick={() =>setStateDel(item.id)}>удалить {item.name}</button>
-{state!==false && state===item.id && <Modal item={state} />}
-{stateDel!==false && stateDel===item.id && <ModalDel item={item} />}
 {children.length && openedFolder.includes(item.id) && <ul>
 {children.map(child => <RenderFolder item={child} />)}
 </ul>}
@@ -44,42 +43,49 @@ return (<div>
 <ul className="App">
 {listDir.filter(item => item.parent === null).map(item => <RenderFolder item={item} />)}
 </ul>
+{state!==false &&<Modal item={state} />}
+{stateDel!==false && <ModalDel itemDel={stateDel} />}
 </div>
 );
 
 function Modal({item}){
-  let removeModal= ()=>{
-    setState(null);
-  }
-  if(item) {
-  let elimList= React.createRef();
-  let add= ()=>{
-    let namelist =elimList.current.value;
-    if(namelist){
-    listDir.push({name: namelist, id: listDir.length + 1, parent: item})
-    elimList.current.value=null;
-    openFolder(item.id);
-    setState(null);}
-    else alert("нельзя создать элемент без имени");
-  }
-  return (<div class="zatemnenie"><div class="modal">
-     <div ClassName="ModalWindow">
-         <div ClassName="ModalHead">
-            <div className='modalTitle'>Добавление дикертории</div>
-         </div>
-         <div ClassName="ModalBody">
-         <textarea placeholder='Имя нового элемента' class='addList' ref ={elimList}></textarea>
-         </div>
-         <div ClassName="ModalFooter">
-         <button className="ModalButon" onClick={add}>добавить в списов</button>
-         <button onClick={removeModal}>отмена</button>
-         </div>
-     </div>
-  </div></div>);
+let removeModal= ()=>{
+setState(null);
 }
+if(item) {
+let elimList= React.createRef();
+let add= ()=>{
+let namelist =elimList.current.value;
+if(namelist){
+listDir.push({name: namelist, id: listDir.length + 1, parent: item})
+elimList.current.value=null;
+openFolder(item.id);
+setState(null);}
+else alert("нельзя создать элемент без имени");
+}
+return (<div className="zatemnenie"><div className="modal">
+<div сlassName="ModalWindow">
+<div className="ModalHead">
+<div className='modalTitle'>Добавление дикертории</div>
+</div>
+<div className="ModalBody">
+<textarea placeholder='Имя нового элемента' class='addList' ref ={elimList}></textarea>
+</div>
+<div className="ModalFooter">
+<button className="ModalButon" onClick={add}>добавить в списов</button>
+<button onClick={removeModal}>отмена</button>
+</div>
+</div>
+</div></div>);
+}
+return null;
 };
-function ModalDel({item}){
 
+
+function ModalDel({itemDel}){
+  console.log(itemDel);
+  let item = listDir.filter(elem=> elem.id==itemDel)[0];
+  console.log(item);
   function childrenDel(item){//функция удаления всех дочерних элементов
   let children = listDir.filter(itemdir => itemdir.parent === item.id);
   if(listDir.filter(itemdel => itemdel.parent === item.id).length)
@@ -109,6 +115,7 @@ function ModalDel({item}){
          </div>
      </div>
   </div></div>);
-}
+}return null;
 };
+
 }

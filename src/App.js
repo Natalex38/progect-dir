@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useState, useEffectfrom} from 'react';
+import React, {useState} from 'react';
 
 const listDir =[
 {name: 'папка1', id: 1, parent: null },
@@ -27,8 +27,7 @@ setOpenedFolder([...openedFolder,id])
 const RenderFolder = ({item}) => {
 
 const children = listDir.filter(dir => dir.parent === item.id);
-//{state!==false && state===item.id && <Modal item={state} />}
-//{stateDel!==false && stateDel===item.id && <ModalDel item={item} />}
+
 return <li>
 <span onClick={() => children.length && openFolder(item.id)}>{item.name}</span>
 <button onClick={() =>setState(item.id)} class="zatemnenie">добавить элемент в {item.name}</button>
@@ -97,7 +96,6 @@ function ModalDel({itemDel}){
     setStateDel(null);
   }
   if(item) {
-  let elimList= React.createRef();
   let deleteDir= ()=>{
   if(listDir.filter(itemdir => itemdir.parent === item.id))childrenDel(item);
   delete listDir[item.id-1];
